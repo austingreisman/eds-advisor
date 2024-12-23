@@ -19,3 +19,7 @@ docs/Perioperative[[:space:]]Considerations[[:space:]]in[[:space:]]Patients[[:sp
 docs/Sleep[[:space:]]Issues[[:space:]]in[[:space:]]EDS.pdf filter=lfs diff=lfs merge=lfs -text
 docs/hEDS[[:space:]]Clinical[[:space:]]Phenotypes.pdf filter=lfs diff=lfs merge=lfs -text
 docs/hEDS[[:space:]]Prevalance[[:space:]]in[[:space:]]POTS[[:space:]]Paper.pdf filter=lfs diff=lfs merge=lfs -text
+docs/EDS[[:space:]]Papers[[:space:]]and[[:space:]]Care[[:space:]]suggustions.pdf filter=lfs diff=lfs merge=lfs -text
+docs/Mast[[:space:]]Cell[[:space:]]Activation[[:space:]]Syndrome[[:space:]]papers.pdf filter=lfs diff=lfs merge=lfs -text
+docs/Navigating[[:space:]]the[[:space:]]Diagnosis[[:space:]]and[[:space:]]Management[[:space:]]of[[:space:]]hypermobile[[:space:]]Ehlers-Danlos[[:space:]]Syndrome[[:space:]]and[[:space:]]Hypermobility[[:space:]]Spectrum[[:space:]]Disorder[[:space:]]book.pdf filter=lfs diff=lfs merge=lfs -text
+docs/POTS[[:space:]]research[[:space:]]papers.pdf filter=lfs diff=lfs merge=lfs -text
