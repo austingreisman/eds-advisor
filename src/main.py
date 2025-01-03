@@ -59,7 +59,7 @@ def systematic_query(query):
     initial_response = agent.chat(query)
     
     # If response is inconclusive, systematically check each tool
-    if "I'm sorry" in str(initial_response) or len(str(initial_response)) < 50:
+    if initial_response.sources[0].content == 'Empty Response':
         for tool in individual_query_engine_tools:
             try:
                 specific_response = tool.query_engine.query(query)
@@ -80,8 +80,10 @@ individual_query_engine_tools = [
     QueryEngineTool(
         query_engine=index_set[doc].as_query_engine(),
         metadata=ToolMetadata(
-            name=f"vector_index_{Path(doc).stem}",
-            description=f"useful for when you want to answer queries about {Path(doc).stem}",
+            name=f"vector_index_{Path(doc).name}",  # Use full filename
+            description=f"Contains detailed information about {Path(doc).stem}. "
+                        f"Use this tool when the query is specifically related to {Path(doc).stem}. "
+                        "Provides precise, document-specific information.",
         ),
     )
     for doc in documents
@@ -110,7 +112,7 @@ def chat_loop():
     1. Answer the question using only information from the documents. If you cannot find the answer in the documents, say "I'm sorry, I don't have that information in my databases".
     2. Use the tools to answer the question.
     3. Mention that you are not a doctor and any advice given is for educational purposes only.
-    4. Output text in normal English, not markdown.
+    4. Do NOT use markdown.
     5. Keep your answers concise and to the point."""
 
     agent.chat_history.append({
