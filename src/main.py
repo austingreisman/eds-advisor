@@ -63,7 +63,7 @@ def systematic_query(query):
         for tool in individual_query_engine_tools:
             try:
                 specific_response = tool.query_engine.query(query)
-                if len(str(specific_response)) > 50:
+                if specific_response.sources[0].content != 'Empty Response':
                     return specific_response
             except Exception as e:
                 print(f"Error querying tool {tool.metadata.name}: {e}")
