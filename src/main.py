@@ -11,7 +11,7 @@ Settings.chunk_size = 1024
 
 # Get file full file paths from docs folder
 docs_dir = Path(__file__).parent.parent / "docs"
-documents = [str(file_path) for file_path in docs_dir.glob("*")]
+documents = [str(file_path) for file_path in docs_dir.glob("*.pdf")]
 
 # Function to create or load indices
 def setup_indices(documents):
@@ -25,10 +25,6 @@ def setup_indices(documents):
             # Try to load existing index
             storage_context = StorageContext.from_defaults(persist_dir=str(storage_path))
             cur_index = load_index_from_storage(storage_context)
-            # cur_index = VectorStoreIndex.from_documents(
-            #     [],  # Empty list since we're loading from storage
-            #     storage_context=storage_context
-            # )
             print(f"Loaded existing index for {doc_name}")
         except:
             # If no existing index, create a new one
