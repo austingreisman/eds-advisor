@@ -1,5 +1,5 @@
 from pathlib import Path
-from llama_index.core import VectorStoreIndex, StorageContext, Settings, SimpleDirectoryReader
+from llama_index.core import VectorStoreIndex, StorageContext, Settings, SimpleDirectoryReader, load_index_from_storage
 from llama_index.llms.ollama import Ollama
 from llama_index.core.agent import FunctionCallingAgentWorker
 from llama_index.core.agent import AgentRunner
@@ -24,17 +24,18 @@ def setup_indices(documents):
         try:
             # Try to load existing index
             storage_context = StorageContext.from_defaults(persist_dir=str(storage_path))
-            cur_index = VectorStoreIndex.from_documents(
-                [],  # Empty list since we're loading from storage
-                storage_context=storage_context
-            )
+            cur_index = load_index_from_storage(storage_context)
+            # cur_index = VectorStoreIndex.from_documents(
+            #     [],  # Empty list since we're loading from storage
+            #     storage_context=storage_context
+            # )
             print(f"Loaded existing index for {doc_name}")
         except:
             # If no existing index, create a new one
             print(f"Creating new index for {doc_name}")
             
             # Load documents using SimpleDirectoryReader
-            documents = SimpleDirectoryReader(input_files=[doc]).load_data()
+            documents = SimpleDirectoryReader(input_files=[doc]).load_data() #This may be wrong...
             
             # Use sentence splitter from the original function
             splitter = SentenceSplitter(chunk_size=1024)
@@ -63,7 +64,7 @@ def systematic_query(query):
         for tool in individual_query_engine_tools:
             try:
                 specific_response = tool.query_engine.query(query)
-                if specific_response.sources[0].content != 'Empty Response':
+                if specific_response.response != 'Empty Response':
                     return specific_response
             except Exception as e:
                 print(f"Error querying tool {tool.metadata.name}: {e}")
@@ -80,7 +81,7 @@ individual_query_engine_tools = [
     QueryEngineTool(
         query_engine=index_set[doc].as_query_engine(),
         metadata=ToolMetadata(
-            name=f"vector_index_{Path(doc).name}",  # Use full filename
+            name=f"vector_index_{Path(doc).name.replace(' ', '_')}",  # Use full filename
             description=f"Contains detailed information about {Path(doc).stem}. "
                         f"Use this tool when the query is specifically related to {Path(doc).stem}. "
                         "Provides precise, document-specific information.",
@@ -111,9 +112,8 @@ def chat_loop():
     You MUST do the following:
     1. Answer the question using only information from the documents. If you cannot find the answer in the documents, say "I'm sorry, I don't have that information in my databases".
     2. Use the tools to answer the question.
-    3. Mention that you are not a doctor and any advice given is for educational purposes only.
-    4. Do NOT use markdown.
-    5. Keep your answers concise and to the point."""
+    3. Do NOT use markdown.
+    4. Keep your answers concise and to the point."""
 
     agent.chat_history.append({
         "role": "system", 
